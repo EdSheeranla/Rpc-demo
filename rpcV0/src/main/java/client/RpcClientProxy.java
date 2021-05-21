@@ -1,7 +1,6 @@
 package client;
 
 import org.apache.log4j.Logger;
-import server.ResponseCode;
 import server.RpcResponse;
 
 import java.lang.reflect.InvocationHandler;
@@ -15,9 +14,14 @@ public class RpcClientProxy implements InvocationHandler {
 
     private final Logger logger = Logger.getLogger(RpcClientProxy.class);
 
-    public RpcClientProxy(String host, int port) {
-        this.host = host;
-        this.port = port;
+//    public RpcClientProxy(String host, int port) {
+//        this.host = host;
+//        this.port = port;
+//    }
+    private RpcClient rpcClient;
+
+    public RpcClientProxy(RpcClient rpcClient) {
+        this.rpcClient = rpcClient;
     }
 
     @SuppressWarnings("unchecked")
@@ -33,8 +37,7 @@ public class RpcClientProxy implements InvocationHandler {
                 .parameters(args)
                 .paraType(method.getParameterTypes())
                 .build();
-        RpcClient client = new RpcClient();
-        Object response = client.sendRequest(rpcRequest,host,port);
-        return ((RpcResponse) response).getData();
+
+        return rpcClient.sendRequest(rpcRequest);
     }
 }

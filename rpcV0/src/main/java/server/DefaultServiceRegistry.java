@@ -10,8 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultServiceRegistry implements ServiceRegistry {
     private final static Logger logger = Logger.getLogger(DefaultServiceRegistry.class);
-    private final Map<String, Object> serviceMap = new ConcurrentHashMap<String, Object>();
-    private final Set<String> registeredService = ConcurrentHashMap.newKeySet();
+    private final static Map<String, Object> serviceMap = new ConcurrentHashMap<String, Object>();
+    private final static Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
     public <T> void register(T service) {
         String serviceName = service.getClass().getCanonicalName();

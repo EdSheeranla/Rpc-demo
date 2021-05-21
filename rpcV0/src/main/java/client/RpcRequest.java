@@ -16,6 +16,10 @@ public class RpcRequest implements Serializable {
     //调用方法的参数类型
     private Class<?>[] paraTypes;
 
+//    Jackson反序列化需要添加一个无参构造器
+    public RpcRequest() {
+    }
+
     private RpcRequest(Builder builder) {
         this.methodName = builder.methodName;
         this.interfaceName = builder.interfaceName;

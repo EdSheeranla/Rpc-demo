@@ -6,7 +6,8 @@ public class serverTest {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        RpcServer rpcServer = new NettyServer();
+//        SocketServer rpcServer = new SocketServer(serviceRegistry);
         rpcServer.start(9000);
     }
 }
