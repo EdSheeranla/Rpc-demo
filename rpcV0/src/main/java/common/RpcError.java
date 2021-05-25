@@ -6,4 +6,7 @@ public class RpcError {
     public final static String UNKNOWN_PROTOCOL = "unknown protocol";
     public static final String UNKNOWN_PACKAGE = "unknown package";
     public static final String UNKNOWN_SERIALIZER = "unknown serializer";
+
+    public static final String REGISTER_SERVICE_FAILED = "register service failed";
+    public static final String CLIENT_CONNECT_SERVER_FAILURE = "client connect server failure";
 }

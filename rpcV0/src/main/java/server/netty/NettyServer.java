@@ -1,9 +1,6 @@
-package server;
+package server.netty;
 
-import common.CommonDecoder;
-import common.CommonEncoder;
-import common.JsonSerializer;
-import common.KryoSerializer;
+import common.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,12 +9,34 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.apache.log4j.Logger;
+import serializer.KryoSerializer;
+import server.RpcServer;
+import server.provider.ServiceProvider;
+import server.provider.ServiceProviderImpl;
+import server.registry.ServiceRegistry;
+import server.registry.ZKServiceRegistry;
+
+import java.net.InetSocketAddress;
 
 
 public class NettyServer implements RpcServer {
     private final static Logger logger = Logger.getLogger(NettyServer.class);
+    private final String host;
+    private final int port;
+    private final ServiceRegistry serviceRegistry;
+    private final ServiceProvider serviceProvider;
+    private CommonSerializer serializer;
+
+    public NettyServer(String host, int port) {
+        this.host = host;
+        this.port = port;
+        serviceRegistry = new ZKServiceRegistry();
+        serviceProvider = new ServiceProviderImpl();
+    }
+
     @Override
-    public void start(int port) {
+    public void start() {
+        logger.info("启动服务器中........");
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -38,14 +57,23 @@ public class NettyServer implements RpcServer {
                         }
                     });
 
-            ChannelFuture future = serverBootstrap.bind(port).sync();
+            ChannelFuture future = serverBootstrap.bind(host, port).sync();
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            logger.error("服务器启动出现错误",e);
-        }finally {
+            logger.error("服务器启动出现错误", e);
+        } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
 
     }
+
+    @Override
+    public <T> void publishService(Object service, Class<T> serviceClass) {
+
+        serviceProvider.addServiceProvider(service);
+        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
+    }
+
 }
+

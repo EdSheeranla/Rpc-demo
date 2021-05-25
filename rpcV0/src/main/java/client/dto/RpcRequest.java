@@ -1,6 +1,5 @@
-package client;
+package client.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,6 +14,8 @@ public class RpcRequest implements Serializable {
     private Object[] parameters;
     //调用方法的参数类型
     private Class<?>[] paraTypes;
+
+    private int requestId;
 
 //    Jackson反序列化需要添加一个无参构造器
     public RpcRequest() {

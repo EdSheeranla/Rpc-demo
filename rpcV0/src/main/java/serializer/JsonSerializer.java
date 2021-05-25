@@ -1,8 +1,9 @@
-package common;
+package serializer;
 
-import client.RpcRequest;
+import client.dto.RpcRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.CommonSerializer;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

@@ -1,14 +1,12 @@
 package common;
 
-import client.RpcRequest;
+import client.dto.RpcRequest;
 import exceptions.RpcException;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
-import io.netty.util.concurrent.EventExecutorGroup;
 import org.apache.log4j.Logger;
-import server.RpcResponse;
+import server.dto.RpcResponse;
 
 import java.util.List;
 

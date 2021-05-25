@@ -1,6 +1,9 @@
-package server;
+package server.socket;
 
 import org.apache.log4j.Logger;
+import server.RequestHandlerThread;
+import server.handler.RequestHandler;
+import server.provider.ServiceProvider;
 
 
 import java.io.IOException;
@@ -16,14 +19,14 @@ public class SocketServer {
     private final static int MAXIMUM_POOL_SIZE = 50;
     private final static long KEEP_ALIVE_TIME = 60;
     private final static int BLOCKING_QUEUE_CAPACITY = 100;
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceProvider serviceProvider;
 
 
     private static final Logger logger = Logger.getLogger(SocketServer.class);
 
 
-    public SocketServer(ServiceRegistry serviceRegistry){
-        this.serviceRegistry = serviceRegistry;
+    public SocketServer(ServiceProvider serviceProvider){
+        this.serviceProvider = serviceProvider;
         BlockingQueue<Runnable> workingQueue = new ArrayBlockingQueue<Runnable>(BLOCKING_QUEUE_CAPACITY);
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         threadPool = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_TIME, TimeUnit.SECONDS, workingQueue, threadFactory);
@@ -36,7 +39,7 @@ public class SocketServer {
             Socket socket;
             while((socket = serverSocket.accept())!=null){
                 logger.info("消费者连接："+socket.getInetAddress()+" "+port);
-                threadPool.execute(new RequestHandlerThread(socket,new RequestHandler(),serviceRegistry));
+                threadPool.execute(new RequestHandlerThread(socket,new RequestHandler(), serviceProvider));
             }
         } catch (IOException e) {
             e.printStackTrace();

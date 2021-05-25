@@ -1,13 +1,17 @@
 package server;
 
+import server.netty.NettyServer;
+import service.HelloService;
+import service.HelloServiceImpl;
+
 public class serverTest {
     public static void main(String[] args) {
 
         HelloService helloService = new HelloServiceImpl();
-        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
-        serviceRegistry.register(helloService);
-        RpcServer rpcServer = new NettyServer();
-//        SocketServer rpcServer = new SocketServer(serviceRegistry);
-        rpcServer.start(9000);
+
+        RpcServer rpcServer = new NettyServer("127.0.0.1",9000);
+        rpcServer.publishService(helloService,helloService.getClass());
+        rpcServer.start();
+
     }
 }

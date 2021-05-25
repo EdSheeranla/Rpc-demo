@@ -1,26 +1,26 @@
 package server;
 
-import client.RpcRequest;
+import client.dto.RpcRequest;
 import org.apache.log4j.Logger;
+import server.dto.RpcResponse;
+import server.handler.RequestHandler;
+import server.provider.ServiceProvider;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+@Deprecated
 public class RequestHandlerThread implements Runnable {
     private final Logger logger = Logger.getLogger(RequestHandlerThread.class);
     private Socket socket;
-
     private RequestHandler requestHandler;
 
-    private ServiceRegistry serviceRegistry;
 
-
-    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceRegistry serviceRegistry) {
+    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceProvider serviceProvider) {
         this.socket = socket;
         this.requestHandler = requestHandler;
-        this.serviceRegistry = serviceRegistry;
     }
 
     @Override
@@ -30,10 +30,8 @@ public class RequestHandlerThread implements Runnable {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 
             RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
-            String interfaceName = rpcRequest.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
+            Object result = requestHandler.handle(rpcRequest);
 
-            Object result = requestHandler.handle(rpcRequest, service);
             objectOutputStream.writeObject(RpcResponse.success(result));
             objectOutputStream.flush();
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package server;
+package service;
 
 import org.apache.log4j.Logger;
 

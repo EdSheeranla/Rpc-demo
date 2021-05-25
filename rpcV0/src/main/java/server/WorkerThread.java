@@ -1,8 +1,9 @@
 package server;
 
-import client.RpcRequest;
+import client.dto.RpcRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import server.dto.RpcResponse;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 
+@Deprecated
 @Data
 @AllArgsConstructor
 public class WorkerThread implements Runnable {

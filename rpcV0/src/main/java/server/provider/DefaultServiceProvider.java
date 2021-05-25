@@ -1,4 +1,4 @@
-package server;
+package server.provider;
 
 import common.RpcError;
 import exceptions.RpcException;
@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DefaultServiceRegistry implements ServiceRegistry {
-    private final static Logger logger = Logger.getLogger(DefaultServiceRegistry.class);
+public class DefaultServiceProvider implements ServiceProvider {
+    private final static Logger logger = Logger.getLogger(DefaultServiceProvider.class);
     private final static Map<String, Object> serviceMap = new ConcurrentHashMap<String, Object>();
     private final static Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
-    public <T> void register(T service) {
+    public <T> void addServiceProvider(T service) {
         String serviceName = service.getClass().getCanonicalName();
         if (registeredService.contains(serviceName)) return;
         registeredService.add(serviceName);
@@ -28,11 +28,13 @@ public class DefaultServiceRegistry implements ServiceRegistry {
 
     }
 
-    public Object getService(String serviceName) {
+    public Object getServiceProvider(String serviceName) {
         Object service = serviceMap.get(serviceName);
         if (service == null) {
             throw new RpcException(RpcError.SERVICE_NOT_FOUND);
         }
         return service;
     }
+
+
 }
