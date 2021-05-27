@@ -32,7 +32,6 @@ public class ThreadPoolFactory {
             pool = createDefaultThreadPool(threadNamePrefix,daemon);
             threadPoolMap.put(threadNamePrefix,pool);
         }
-        logger.info("创建自建线程池成功");
         return pool;
     }
 
@@ -51,7 +50,6 @@ public class ThreadPoolFactory {
      */
     private static ThreadFactory createThreadFactory(String threadNamePrefix, Boolean daemon) {
         if (threadNamePrefix != null) {
-            logger.info("创建自建线程池: "+threadNamePrefix);
             if (daemon != null) {
                 return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(daemon).build();
             } else {

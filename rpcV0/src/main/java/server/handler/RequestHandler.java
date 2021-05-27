@@ -24,9 +24,7 @@ public class RequestHandler {
             String serviceName = rpcRequest.getInterfaceName();
             Object service = serviceProvider.getServiceProvider(serviceName);
             result = invokeTargetMethod(rpcRequest, service);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return result;

@@ -1,8 +1,11 @@
-package service;
+package service.impl;
 
+import annotation.Service;
 import org.apache.log4j.Logger;
+import service.dto.HelloObject;
+import service.HelloService;
 
-
+@Service
 public class HelloServiceImpl  implements HelloService {
     private final static Logger logger = Logger.getLogger(HelloServiceImpl.class);
 

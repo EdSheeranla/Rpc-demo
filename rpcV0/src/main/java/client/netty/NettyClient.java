@@ -7,14 +7,15 @@ import common.*;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
+import loadBalance.LoadBalancer;
+import loadBalance.RoundRobinLoadBalancer;
 import org.apache.log4j.Logger;
 import serializer.KryoSerializer;
 import server.dto.RpcResponse;
-import server.registry.ServiceRegistry;
-import server.registry.ZKServiceRegistry;
+import registry.ServiceRegistry;
+import registry.ZKServiceRegistry;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,7 +36,11 @@ public class NettyClient implements RpcClient {
     }
 
     public NettyClient() {
-        this.serviceRegistry = new ZKServiceRegistry();
+        this.serviceRegistry = new ZKServiceRegistry(new RoundRobinLoadBalancer());
+    }
+
+    public NettyClient(LoadBalancer loadBalancer){
+        this.serviceRegistry = new ZKServiceRegistry(loadBalancer);
     }
 
     @Override

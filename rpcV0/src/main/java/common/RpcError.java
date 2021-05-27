@@ -9,4 +9,5 @@ public class RpcError {
 
     public static final String REGISTER_SERVICE_FAILED = "register service failed";
     public static final String CLIENT_CONNECT_SERVER_FAILURE = "client connect server failure";
+    public static final String SERVICE_SCAN_PACKAGE_NOT_FOUND = "service scan package not found";
 }

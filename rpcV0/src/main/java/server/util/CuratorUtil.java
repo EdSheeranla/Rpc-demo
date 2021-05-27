@@ -8,8 +8,8 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.CreateMode;
-import server.registry.RegistryConstant;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,5 +110,35 @@ public class CuratorUtil {
         pathChildrenCache.start();
     }
 
+    /**
+     *  注销对应地址服务
+     * @param zkClient
+     * @param inetSocketAddress
+     */
+    public static void clearRegistry(CuratorFramework zkClient, InetSocketAddress inetSocketAddress){
+        EXISTED_NODE.stream().parallel().forEach(p->{
+            if (p.endsWith(inetSocketAddress.toString())){
+                try {
+                    zkClient.delete().forPath(p);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     *  注销所有服务
+     * @param zkClient
+     */
+    public static void clearAllRegistry(CuratorFramework zkClient){
+        EXISTED_NODE.stream().parallel().forEach(p->{
+            try {
+                zkClient.delete().forPath(p);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
 }
